@@ -1,0 +1,201 @@
+[{
+  "_id": "00-000-00",
+  "type": "Toyota",
+  "date": {
+    "$date": "2009-01-30T21:00:00Z"
+  },
+  "status": "in mission",
+  "place": [
+    31.970783,
+    34.772459
+  ],
+  "treatments": [
+    {
+      "data": {
+        "$date": "2020-01-22T21:21:41Z"
+      },
+      "kind": "brakes",
+      "price": 1000
+    }
+  ],
+  "oilPerc": {
+    "$numberDecimal": "91.6300000000000000"
+  }
+},{
+  "_id": "11-111-11",
+  "type": "Volvo",
+  "date": {
+    "$date": "2017-02-28T21:00:00Z"
+  },
+  "status": "in mission",
+  "place": [
+    31.970783,
+    34.772459
+  ],
+  "treatments": [],
+  "oilPerc": {
+    "$numberDecimal": "91.6300000000000000"
+  }
+},{
+  "_id": "22-222-22",
+  "type": "BMW",
+  "date": {
+    "$date": "2017-03-28T21:00:00Z"
+  },
+  "status": "repair",
+  "place": [
+    31.970783,
+    34.772459
+  ],
+  "treatments": [
+    {
+      "data": {
+        "$date": "2020-01-22T21:21:41Z"
+      },
+      "kind": "tires",
+      "price": 750
+    },
+    {
+      "data": {
+        "$date": "2020-01-22T21:21:41Z"
+      },
+      "kind": "brakes",
+      "price": 1000
+    },
+    {
+      "data": {
+        "$date": "2020-01-22T21:21:41Z"
+      },
+      "kind": "tires",
+      "price": 750
+    }
+  ],
+  "oilPerc": {
+    "$numberDecimal": "99.9600000000000000"
+  }
+},{
+  "_id": "33-333-33",
+  "type": "KIA",
+  "date": {
+    "$date": "2017-04-30T21:00:00Z"
+  },
+  "status": "repair",
+  "place": [
+    31.970783,
+    34.772459
+  ],
+  "oilPerc": {
+    "$numberDecimal": "99.9600000000000000"
+  },
+  "treatments": [
+    {
+      "data": {
+        "$date": "2020-01-22T21:21:41Z"
+      },
+      "kind": "tires",
+      "price": 750
+    },
+    {
+      "data": {
+        "$date": "2020-01-22T21:21:41Z"
+      },
+      "kind": "brakes",
+      "price": 1000
+    },
+    {
+      "data": {
+        "$date": "2020-01-22T21:21:41Z"
+      },
+      "kind": "tires",
+      "price": 750
+    }
+  ]
+},{
+  "_id": "44-444-44",
+  "type": "Audi",
+  "date": {
+    "$date": "2017-05-28T21:00:00Z"
+  },
+  "status": "ready",
+  "place": [
+    31.970783,
+    34.772459
+  ],
+  "treatments": [],
+  "oilPerc": {
+    "$numberDecimal": "99.9600000000000000"
+  }
+},{
+  "_id": "55-555-55",
+  "type": "Audi",
+  "date": {
+    "$date": "2017-06-28T21:00:00Z"
+  },
+  "status": "ready",
+  "place": [
+    31.970783,
+    34.772459
+  ],
+  "treatments": [],
+  "oilPerc": {
+    "$numberDecimal": "99.9600000000000000"
+  }
+},{
+  "_id": "66-66-66",
+  "type": "Audi",
+  "date": {
+    "$date": "2017-07-28T21:00:00Z"
+  },
+  "status": "ready",
+  "place": [
+    31.970783,
+    34.772459
+  ],
+  "oilPerc": {
+    "$numberDecimal": "99.9600000000000000"
+  }
+},{
+  "_id": "77-777-77",
+  "type": "Audi",
+  "date": {
+    "$date": "2017-08-28T21:00:00Z"
+  },
+  "status": "ready",
+  "place": [
+    31.970783,
+    34.772459
+  ],
+  "treatments": [],
+  "oilPerc": {
+    "$numberDecimal": "99.9600000000000000"
+  }
+},{
+  "_id": "88-888-88",
+  "type": "BMW",
+  "date": {
+    "$date": "2017-09-28T21:00:00Z"
+  },
+  "status": "in mission",
+  "place": [
+    31.970783,
+    34.772459
+  ],
+  "oilPerc": {
+    "$numberDecimal": "91.6300000000000000"
+  }
+},{
+  "_id": "99-999-99",
+  "type": "Audi",
+  "date": {
+    "$date": "2017-07-28T21:00:00Z"
+  },
+  "status": "ready",
+  "place": [
+    31.970783,
+    34.772459
+  ],
+  "treatments": [],
+  "oilPerc": {
+    "$numberDecimal": "99.9600000000000000"
+  }
+}]
