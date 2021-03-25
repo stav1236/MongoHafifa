@@ -1,4 +1,4 @@
-חיפוש:
+﻿חיפוש:
 
 1)
 רכב לפי מספר רכב
@@ -6,7 +6,7 @@ db.Vehicles.find({_id:"00-000-00"});
 
 2)
 הצגת מיקום ומספר רכב אם רכב במשימה
-db.Vehicles.find({  "status" : "in mission" },{ "_id": 1,"place": 1 });
+db.Vehicles.find({  "status" : "in mission" },{ "_id": 1, "place": 1 });
 
 3)
 הצגת תאריך ומספר רכב אם רכב אינו במשימה
@@ -14,25 +14,33 @@ db.Vehicles.find({  "status" : { "$ne": "in mission"} },{ "_id": 1,"date": 1 });
 
 4)
 שלושה הרכבים החדשים ביותר
-db.Vehicles.find({   }).sort({  "date": 1 }).limit(3);
+db.Vehicles.find().sort({  "date": 1 }).limit(3);
 
 5)
 שלושה הרכבים הישנים ביותר
-db.Vehicles.find({   }).sort({  "date": -1 }).limit(3);
+db.Vehicles.find({}).sort({  "date": -1 }).limit(3);
 
 6)
 הצגת רכבים החל מתאריך מסוים
- db.Vehicles.find({"date": {$gte : new ISODate("2010-01-01T00:00:00Z")}});
+db.Vehicles.find({"date": {$gt : new ISODate("2010-01-01T00:00:00Z")}});
 
 7)
 הצגת כל רכבים שנוצרים בחודשים 7 או  8
-db.Vehicles.aggregate([{$project:{_id:1,year:{$year:'$date'},month:{$month:'$date'}}},{$match:{month:{$in:[7,8]}}}])
+db.Vehicles.aggregate([{$project:{_id:1,month:{$substr:['$date',5,2]}}},{$match:{month:{$in:["07","08"]}}}])
 
-"$eq": [{ "$month": "$bday" }, 9]
+
+
+find Version:
+
+
+db.Vehicles.find( { $where: function() {
+   var dt = new Date(this.date);
+   return (dt.getMonth() == 6 || dt.getMonth() == 7)
+} } );
 
 10)
 הצגת רכבים שעברו טיפול
-db.Vehicles.find({treatments:{$exists:true}})
+db.Vehicles.find({treatments:{$exists:true} , $where : 'this.treatments.length > 0' } );
 
 11)
 הצגת רכבים שעברו מעל שלושה טיפולים
@@ -40,42 +48,65 @@ db.Vehicles.find({treatments:{$exists:true} , $where : 'this.treatments.length >
 
 12)
 כל הרכבים שעברו טיפול שמן
-db.Vehicles.find({"treatments.kind":"oil"});
+db.Vehicles.find({"treatments.kind":"oil"}); 
 
 
 עדכון:
 1)
 הוספת תכונה חדשה כמות דלק 
-db.Vehicles.find().forEach(function(data){ db.Vehicles.update({_id: data._id}, {$set: { oilAmount: 60 }}) });
+db.Vehicles.updateMany({}, {$set: { oilAmount: 60 }});
 
 2)
 עדכון כמות הדלק ל35 לרכבים שבמשימה
-db.Vehicles.find({status:"in mission"}).forEach(function(data){db.Vehicles.update({_id:data._id},{$set:{oilAmount:35}})});
-
+db.Vehicles.updateMany({status:"in mission"}, {$set: { oilAmount: 35 }});
 
 3)
 תוספת 20 לכמות הדלק
-db.Vehicles.find({oilAmount:{$gt:45}}).forEach(function(data){ db.Vehicles.update({_id: data._id}, {$set: { oilAmount: 60 }}) });
-db.Vehicles.find({oilAmount:{$lte:45}}).forEach(function(data){db.Vehicles.update({_id:data._id},{$inc:{oilAmount:20}})});
+db.Vehicles.updateMany({oilAmount:{$gt:40}}, {$set: { oilAmount: 60 }});
+db.Vehicles.updateMany({oilAmount:{$lte:40}}, {$inc:{oilAmount:20}});
 
 4)
 המרת כמות דלק לאחוזי דלק
-db.Vehicles.find({}).forEach(function(data){db.Vehicles.update({_id:data._id},{$rename:{'oilAmount':'oilPerc'}})});
-db.Vehicles.find({}).forEach(function(data){db.Vehicles.update({_id:data._id},{$mul:{oilPerc:NumberDecimal("1.666")}})});
+db.Vehicles.updateMany({},{$rename:{'oilAmount':'oilPerc'}});
+db.Vehicles.updateMany({},{$mul:{oilPerc: NumberDecimal("1.666"))}});
 
 5)
 הוספת טיפול ברקסים וטיפול החלפת צמיג למכוניות שבתיקון
-db.Vehicles.find({status:'repair'}).forEach(function(data){db.Vehicles.update({_id:data._id},{$push:{treatments:{"data":ISODate("2020-01-22T21:21:41Z"),"kind":"brakes","price":1000}}})});
-db.Vehicles.find({status:'repair'}).forEach(function(data){db.Vehicles.update({_id:data._id},{$push:{treatments:{"data":ISODate("2020-01-22T21:21:41Z"),"kind":"tires","price":750}}})});
+db.Vehicles.update({status:'repair'},{$push:{treatments:{"data":ISODate("2020-01-22T21:21:41Z"),"kind":"brakes","price":1000}}})
+db.Vehicles.update({status:'repair'},{$push:{treatments:{"data":ISODate("2020-01-22T21:21:41Z"),"kind":"tires","price":750}}})
 
-6)
+6)*עתיק ביותר
 למחוק את הטיפול הראשון ברשימה
-db.Vehicles.find({}).forEach(function(data){db.Vehicles.update({_id:data._id},{$pop:{treatments:-1}})});
+db.Vehicles.update({},{$pop:{treatments:-1}});
 
 7)
 מיון טיפולים על פי עלות טיפול
 db.Vehicles.aggregate(
 {$unwind: '$treatments'},
-{$sort: {'treatments.price': 1}}).pretty();
+{$sort: {'treatments.price': 1}});
 
 
+db.Vehicles.updateMany(
+   {  },
+   {
+     $push: {
+       treatments: {
+         $each: [ ],
+         $sort: { price : 1 }
+       }
+     }
+   }
+)
+
+8)
+הוספת רכב חדש בעזרת פקודת פקודת עידכון
+db.Vehicles.updateOne({"_id": "10-100-10"}, {$set:{
+  "type": "Audi",
+  "date": new Date(),
+  "status": "ready",
+  "place": [
+    31.970783,
+    34.772459
+  ],
+  "oilPerc":99.9600000000000000
+}} ,{"upsert" : true});

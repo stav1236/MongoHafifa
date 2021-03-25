@@ -1,0 +1,68 @@
+1) 
+db.Vehicles.aggregate([
+{$unwind : "$treatments"},
+{$group : {_id:"$status",  sum : {$sum:"$treatments.price"}, cars : {$addToSet : "$_id"}}},
+{$match : {"sum" : {$gt:3000}}}
+])
+
+
+2) 
+db.Vehicles.aggregate([
+{$unwind : "$treatments"},
+{$project : { _id : 0, year:{$substr:['$date',0,4]}, treatment : "$treatments" }},
+{$group : { _id : "$year", avg : {$avg:"$treatment.price"}}},
+])
+
+3) 
+החזרת כל הטיפולים מסוג בדיקת שמן
+db.Vehicles.aggregate([
+{$unwind: "$treatments"},
+{$project : {_id : "$_i,d" ,treatment : "$treatments"}} ,
+{$match : {"treatment.kind" : "brakes"}}
+])
+
+4) 
+db.Vehicles.aggregate([
+{$group : { _id : "$type", maxKM : {$max:"$km"}, minKM : {$min:"$km"}, cars  : {$addToSet : "$$ROOT"}  }},
+{
+    "$project": {
+        _id: "$_id",
+        maxCar: {
+            "$setDifference": [{
+                    "$map": {
+                        "input": "$cars",
+                        "as": "car",
+                        "in": {
+                            "$cond": [{
+                                    "$eq": ["$maxKM", "$$car.km"]
+                                },
+                                "$$car",
+                                false
+                            ]
+                        }
+                    }
+                },
+                [false]
+            ]
+        },
+        minCar: {
+            "$setDifference": [{
+                    "$map": {
+                        "input": "$cars",
+                        "as": "car",
+                        "in": {
+                            "$cond": [{
+                                    "$eq": ["$minKM", "$$car.km"]
+                                },
+                                "$$car",
+                                false
+                            ]
+                        }
+                    }
+                },
+                [false]
+            ]
+        }
+    }
+}
+])

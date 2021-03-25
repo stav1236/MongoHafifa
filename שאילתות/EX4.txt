@@ -1,0 +1,22 @@
+var mapFunction = function() {
+    var date = this.date
+  if (this.treatments != undefined){
+      this.treatments.forEach(function(treatment){
+        emit(treatment.kind , treatment.price);
+      });
+  }
+}
+var reduceFunction = function(keyCustId, valuesPrices) {
+   return Array.avg(valuesPrices);
+}
+
+db.Vehicles.mapReduce(
+   mapFunction,
+   reduceFunction,
+   {
+       out: "map_reduce_example",
+      query: { date: { $gte: new Date("2000-01-01") } },
+   }
+);
+   
+db.map_reduce_example.find();
